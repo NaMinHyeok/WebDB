@@ -6,7 +6,7 @@ var url=require('url');
 module.exports =  {
     home : function(response){
         db.query(`SELECT * FROM topic`, function(error, topics){
-            db.query(`SELECT * FROM author` ,function(error2,authors){
+            db.query(`SELECT * FROM author` ,function(error2, authors){
                 var title = 'author'
                 var description = 'Hello, Node.js'
                 var list = template.list(topics);
@@ -18,6 +18,17 @@ module.exports =  {
                         table { border-collapse: collapse;}
                         td { border: 1px solid black;}
                     </style>
+                    <form action="/author/create_process" method="post">
+                        <p>
+                            <input type="text" name="name" placeholder="name">
+                        </p>
+                        <p>
+                            <textarea name = "profile" placeholder="description"></textarea>
+                        </p>
+                        <p>
+                            <input type="submit">
+                        </p>
+                    </form>
                     `,``
                     );
                 response.writeHead(200);

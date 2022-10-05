@@ -2,6 +2,7 @@ var http=require('http');
 var url=require('url');
 const { authorSelect } = require('./lib/template.js');
 const topic = require('./lib/topic.js');
+const author = require('./lib/author.js');
 
 var app = http.createServer(function(request, response) {
     var _url = request.url;
