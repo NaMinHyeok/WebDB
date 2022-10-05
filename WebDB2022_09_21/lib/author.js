@@ -7,7 +7,7 @@ module.exports =  {
     home : function(response){
         db.query(`SELECT * FROM topic`, function(error, topics){
             db.query(`SELECT * FROM author` ,function(error2,authors){
-                var title = 'Welcome'
+                var title = 'author'
                 var description = 'Hello, Node.js'
                 var list = template.list(topics);
                 var html = template.HTML(title,list,
