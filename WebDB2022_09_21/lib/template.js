@@ -53,8 +53,13 @@ var template = {
                 <tr>
                     <td>${authors[i].name}</td>
                     <td>${authors[i].profile}</td>
-                    <td><a>update</a></td>
-                    <td><a>delete</a></td>
+                    <td><a href="/author/update?id=${authors[i].id}">update</a></td>
+                    <td>
+                        <form action="/author/delete_process" method="post">
+                            <input type="hidden" name="id" value="${authors[i].id}">
+                            <input type="submit" value="delete">
+                        </form>
+                    </td>
                 <tr>
             `;
             i++;
