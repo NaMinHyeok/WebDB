@@ -44,6 +44,23 @@ var template = {
             <select name="author">
                 ${tag}
             </select>`
+    },
+    authorTable:function(authors){
+        var tag = '<table>';
+        var i = 0;
+        while(i <authors.length){
+            tag += `
+                <tr>
+                    <td>${authors[i].name}</td>
+                    <td>${authors[i].profile}</td>
+                    <td><a>update</a></td>
+                    <td><a>delete</a></td>
+                <tr>
+            `;
+            i++;
+        }
+        tag +='</table>';
+        return tag;
     }
 }
 
