@@ -36,8 +36,8 @@ module.exports =  {
                 ${description}
                 <p>by ${topic[0].name}</p>
                 `,
-                `<a href="/create">create</a> <a href="/update?id=${id}">update</a>
-                    <form action="delete_process" method="post">
+                `<a href="/create">create</a> <a href="/update${id}">update</a>
+                    <form action="/delete_process" method="post">
                         <input type="hidden" name="id" value="${id}">
                         <input type="submit" value="delete">
                     </form>`
@@ -88,7 +88,7 @@ module.exports =  {
                     if(error){
                         throw error;
                     }
-                    response.writeHead(302, {Location: `/?id=${result.insertId}`});
+                    response.writeHead(302, {Location: `/page/${result.insertId}`});
                     response.end();
                 }
             );
@@ -115,7 +115,7 @@ module.exports =  {
                                 <p>${template.authorSelect(authors, topic[0].author_id)}</p>
                                 <p> <input type="submit"> </p>
                             </form> `,
-                            `<a href="/create">create</a> <a href="/update?id=${topic[0].id}">update</a>`
+                            `<a href="/create">create</a> <a href="/update/${topic[0].id}">update</a>`
                             );
                     response.writeHead(200);
                     response.end(html);
@@ -134,7 +134,7 @@ module.exports =  {
             var post = qs.parse(body);
             db.query(`UPDATE topic SET title=?, description=?, author_id=? WHERE id=?`,
                 [post.title, post.description, post.author, post.id], function(error, result){
-                response.writeHead(302, {Location: `/?id=${post.id}`});
+                response.writeHead(302, {Location: `/page/${post.id}`});
                 response.end();
             });
         });

@@ -60,8 +60,8 @@ module.exports =  {
         db.query('SELECT * FROM topic', function(error, topics){
             db.query('SELECT * FROM author', function(error2,authors){
                 var _url = request.url;
-                var queryData = url.parse(_url, true).query;
-                db.query('SELECT * FROM author WHERE id=?', [queryData.id], function(error3,author){
+                var id = request.params.authorId;
+                db.query('SELECT * FROM author WHERE id=?', [id], function(error3,author){
                     var title = 'author'
                     var list=template.list(topics);
                     var html=template.HTML(title,list,
@@ -72,7 +72,7 @@ module.exports =  {
                             td { border: 1px solid black;}
                         </style>
                         <form action="/author/update_process" method="post">
-                            <p><input type="hidden" name="id" value="${queryData.id}"></p>
+                            <p><input type="hidden" name="id" value="${id}"></p>
                             <p><input type="text" name="name" value="${author[0].name}"></p>
                             <p><textarea name="profile" placeholder="description">${author[0].profile}</textarea></p>
                             <p><input type="submit" value="update"></p>
