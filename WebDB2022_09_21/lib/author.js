@@ -123,8 +123,7 @@ module.exports =  {
                     response.writeHead(302, {Location: `/author`});
                     response.end();
                     }
-                )
-                
+                );
             });
         });
     }

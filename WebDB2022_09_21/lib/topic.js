@@ -4,7 +4,7 @@ var qs=require('querystring');
 var url=require('url');
 
 module.exports =  {
-    home : function(response){
+    home : function(request, response){
         db.query(`SELECT * FROM topic`, function(error, topics){
             var title = 'Welcome'
             var description = 'Hello, Node.js'
