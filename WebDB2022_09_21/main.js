@@ -1,5 +1,6 @@
 var http=require('http');
 var url=require('url');
+const { authorSelect } = require('./lib/template.js');
 const topic = require('./lib/topic.js');
 
 var app = http.createServer(function(request, response) {
@@ -29,6 +30,21 @@ var app = http.createServer(function(request, response) {
     }
     else if(pathname === '/delete_process') {
         topic.delete_process(request,response);
+    }
+    else if(pathname === '/author'){
+        author.home(request,response)
+    }
+    else if(pathname === '/author/create_process'){
+        author.create_process(request,response)
+    }
+    else if(pathname === '/author/update'){
+        author.update(request,response)
+    }
+    else if(pathname === '/author/update_process'){
+        author.update_process(request,response)
+    }
+    else if(pathname === '/author/delete_process'){
+        author.delete_process(request,response)
     }
     else {
         response.writeHead(404);
