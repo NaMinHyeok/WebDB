@@ -6,12 +6,16 @@ var url=require('url');
 module.exports =  {
     home : function(request, response){
         db.query(`SELECT * FROM topic`, function(error, topics){
-            var title = 'Welcome'
+            var titleoftopic = 'Welcome'
             var description = 'Hello, Node.js'
-            var list = template.list(topics);
-            var html = template.HTML(title,list,
-                `<h2>${title}</h2><p>${description}</p>`,
-                `<a href="/create">create</a>`);
+            var context = {title:titleoftopic,
+                            list:topics,
+                            control: `<a href="/create">create</a>`,
+                            body:`<h2>${titleoftopic}</h2>${description}`
+                            };
+            request.app.render('home',context,function(err,html){   // 1번째 파라미터는 ejs파일의 이름 2번째는 넘겨줄 변수, 3번째 콜백함수
+                response.end(html);
+            });
             response.writeHead(200);
             response.end(html);
         });
