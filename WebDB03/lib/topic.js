@@ -14,10 +14,10 @@ module.exports =  {
                             body:`<h2>${titleoftopic}</h2>${description}`
                             };
             request.app.render('home',context,function(err,html){   // 1번째 파라미터는 ejs파일의 이름 2번째는 넘겨줄 변수, 3번째 콜백함수
+            //  rendering : ejs 파일에 변수들의 값이나 프로그램들을 모두 컴파일하여 완전한 html 문서로 만드는 작업
+            //              rendering을 하는 메소드가 render() 메소드다
                 response.end(html);
             });
-            response.writeHead(200);
-            response.end(html);
         });
     },
 
@@ -32,49 +32,51 @@ module.exports =  {
             if(error2){
                 throw error2;
             }
-            var title = topic[0].title;
-            var description = topic[0].description;
-            var list = template.list(topics);
-            var html = template.HTML(title, list,
-                `<h2>${title}</h2>
-                ${description}
-                <p>by ${topic[0].name}</p>
-                `,
-                `<a href="/create">create</a> <a href="/update${id}">update</a>
-                    <form action="/delete_process" method="post">
-                        <input type="hidden" name="id" value="${id}">
-                        <input type="submit" value="delete">
-                    </form>`
-                );
-                response.writeHead(200);
-                response.end(html);
+            var titleoftopic = topic[0].title;
+            var descriptionoftopic = topic[0].description;
+            var context= {
+                title: titleoftopic,
+                list:topics,
+                control:    `<a href="/create">create</a>
+                            <a href="/update/${id}">update</a>
+                            <form action="/delete_process" method="post">
+                                <input type="hidden" name="id" value="${id}">
+                                <input type="submit" value="delete">
+                            </form>`,
+                body:`<h2>${titleoftopic}</h2>${descriptionoftopic}<p>by${topic[0].name}</p>`
+            }
+                request.app.render('home',context,function(err,html){
+                    response.end(html);
+                })
         });
     });
     },
     create : function(request,response){
         db.query(`SELECT * FROM topic`, function(error, topics) {
             db.query('SELECT * FROM author', function(error2, authors){
-                var title = 'Create';
-                var list = template.list(topics);
-                var html = template.HTML(title, list,
-                    `
+                var titleofcreate = 'Create';
+                var context = {
+                    title:titleofcreate,
+                    list: topics,
+                    control : `<a href="/create">create</a>`,
+                    body : `
                     <form action="/create_process" method="post">
                             <p><input type="text" name="title" placeholder="title"></p>
                             <p>
                                 <textarea name="description" placeholder="description"></textarea>
                             </p>
                             <p>
-                                ${template.authorSelect(authors,'')}
+                                ${template.authorSelect(authors)}
                             </p>
                             <p>
                                 <input type="submit">
                             </p>
                     </form>
-                    `,
-                    `<a href="/create">create</a>`
-                );
-                response.writeHead(200);
-                response.end(html);
+                    `
+                }
+                request.app.render('home',context,function(err,html){
+                    response.end(html)
+                });
             });
         });
     },
@@ -110,21 +112,24 @@ module.exports =  {
                     throw error2;
                 }
                 db.query('SELECT * FROM author', function(error2,authors){
-                    var list=template.list(topics);
-                    var html=template.HTML(topic[0].title,list,
-                        `       <form action="/update_process" method="post">
-                                <input type="hidden" name="id" value="${topic[0].id}">
-                                <p><input type="text" name="title" placeholder="title" value="${topic[0].title}"></p>
-                                <p><textarea name="description" placeholder="description">${topic[0].description}</textarea></p>
-                                <p>${template.authorSelect(authors, topic[0].author_id)}</p>
-                                <p> <input type="submit"> </p>
-                            </form> `,
-                            `<a href="/create">create</a> <a href="/update/${topic[0].id}">update</a>`
-                            );
-                    response.writeHead(200);
-                    response.end(html);
-                })
-                
+                    var context = {
+                        title:topic[0].title,
+                        list:topics,
+                        control: `<a href="/create">create</a>
+                                    <a href="/update/${topic[0].id}">update</a>`,
+                        body : `
+                        <form action="/update_process" method="post">
+                        <input type="hidden" name="id" value="${topic[0].id}">
+                        <p><input type="text" name="title" placeholder="title" value="${topic[0].title}"></p>
+                        <p><textarea name="description" placeholder="description">${topic[0].description}</textarea></p>
+                        <p>${template.authorSelect(authors, topic[0].author_id)}</p>
+                        <p> <input type="submit"> </p>
+                    </form> `
+                    }
+                    request.app.render('home',context,function(err,html){
+                        response.end(html);
+                    });
+                });
             });
         });
     },
